@@ -1,4 +1,3 @@
-
 name: Build Zara AI Android APK & Play Store AAB
 on:
 push:
