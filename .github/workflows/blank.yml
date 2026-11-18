@@ -1,4 +1,4 @@
-یہ رہا ورک فلو کوڈ۔ برائے مہربانی اسے کاپی کر کے اپنی فائل "blank.yml" میں پیسٹ کریں۔
+
 name: Build Zara AI Android APK & Play Store AAB
 on:
 push:
