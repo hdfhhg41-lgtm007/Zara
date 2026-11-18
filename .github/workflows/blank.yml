@@ -1,34 +1,41 @@
 name: Build Zara AI Android APK & Play Store AAB
+
 on:
-push:
-branches: [ "main" ]
-pull_request:
-branches: [ "main" ]
-workflow_dispatch:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+  workflow_dispatch:
+
 jobs:
-build:
-runs-on: ubuntu-latest
-steps:
-- uses: actions/checkout@v4
-- name: Set up JDK
-uses: actions/setup-java@v3
-with
-java-version: '17'
-distribution: 'temurin'
-- name: Grant execute permission for gradlew
-run: chmod +x android/gradlew
-- name: Build APK and App Bundle
-run: |
-cd android
-./gradlew assembleRelease
-./gradlew bundleRelease
-- name: Upload APK
-uses: actions/upload-artifact@v3
-with:
-name: app-release.apk
-path: android/app/build/outputs/apk/release/app-release.apk
-- name: Upload App Bundle
-uses: actions/upload-artifact@v3
-with:
-name: app-release.aab
-path: android/app/build/outputs/bundle/release/app-release.aab
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up JDK
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      - name: Grant execute permission for gradlew
+        run: chmod +x android/gradlew
+
+      - name: Build APK and App Bundle
+        run: |
+          cd android
+          ./gradlew assembleRelease
+          ./gradlew bundleRelease
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v3
+        with:
+          name: app-release.apk
+          path: android/app/build/outputs/apk/release/
+
+      - name: Upload App Bundle
+        uses: actions/upload-artifact@v3
+        with:
+          name: app-release.aab
+          path: android/app/build/outputs/bundle/release/
+          
