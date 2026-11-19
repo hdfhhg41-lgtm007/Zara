@@ -1,2 +1,1 @@
-(-)(-)(-)
-name: Zara
+--- name: Zara ---
