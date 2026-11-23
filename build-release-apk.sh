@@ -32,6 +32,10 @@ if [ ! -f "$KEYSTORE_FILE" ]; then
 fi
 
 cd "$SCRIPT_DIR"
+if [ -f "./gradlew" ]; then
+  chmod +x ./gradlew 2>/dev/null || true
+fi
+
 if [ -x "./gradlew" ]; then
   GRADLE_BIN="./gradlew"
 elif command -v gradle >/dev/null 2>&1; then
@@ -45,21 +49,27 @@ export ZARA_KEYSTORE_PASSWORD="$STORE_PASS"
 export ZARA_KEY_ALIAS="$KEY_ALIAS"
 export ZARA_KEY_PASSWORD="$KEY_PASS"
 
+AAPT2_ARG=""
+if { [ -n "${TERMUX_VERSION:-}" ] || [ -d "/data/data/com.termux/files/usr" ]; } && command -v aapt2 >/dev/null 2>&1; then
+  AAPT2_ARG="-Pandroid.aapt2FromMavenOverride=$(command -v aapt2)"
+  echo "Termux detected: using native aapt2 override ($AAPT2_ARG)"
+fi
+
 BUILD_TARGET="${1:-both}"
 GRADLE_FLAGS="--no-daemon --max-workers=2"
 
 if [ "$BUILD_TARGET" = "debug" ]; then
   echo "Building installable Debug APK (low-memory mode)..."
-  "$GRADLE_BIN" $GRADLE_FLAGS assembleDebug
+  "$GRADLE_BIN" $GRADLE_FLAGS $AAPT2_ARG assembleDebug
   APK_OUT="${APP_DIR}/build/outputs/apk/debug/app-debug.apk"
 elif [ "$BUILD_TARGET" = "release" ]; then
   echo "Building signed Release APK (low-memory mode)..."
-  "$GRADLE_BIN" $GRADLE_FLAGS clean assembleRelease
+  "$GRADLE_BIN" $GRADLE_FLAGS $AAPT2_ARG clean assembleRelease
   APK_OUT="${APP_DIR}/build/outputs/apk/release/app-release.apk"
 else
   echo "Building BOTH Debug and signed Release APKs sequentially (low-memory mode)..."
-  "$GRADLE_BIN" $GRADLE_FLAGS clean assembleDebug
-  "$GRADLE_BIN" $GRADLE_FLAGS assembleRelease
+  "$GRADLE_BIN" $GRADLE_FLAGS $AAPT2_ARG clean assembleDebug
+  "$GRADLE_BIN" $GRADLE_FLAGS $AAPT2_ARG assembleRelease
   APK_OUT="${APP_DIR}/build/outputs/apk/release/app-release.apk"
 fi
 

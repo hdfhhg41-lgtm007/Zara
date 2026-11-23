@@ -42,6 +42,7 @@
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" />
 
+    <!-- Android 11+ (API 30+) Package Visibility for App Launching & Messaging Intents -->
     <queries>
         <package android:name="com.whatsapp" />
         <package android:name="com.whatsapp.w4b" />
@@ -90,6 +91,7 @@
         android:theme="@style/Theme.ZaraApp"
         android:usesCleartextTraffic="false">
 
+        <!-- Native Runtime Permission, WebView Bridge & Play Billing Activity -->
         <activity
             android:name=".MainActivity"
             android:exported="true"
@@ -105,6 +107,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
 
+            <!-- Digital Asset Links & App Links Verification -->
             <intent-filter android:autoVerify="true">
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
@@ -116,6 +119,7 @@
             </intent-filter>
         </activity>
 
+        <!-- Foreground Microphone & Security Service -->
         <service
             android:name=".ZaraForegroundVoiceService"
             android:enabled="true"
@@ -123,6 +127,7 @@
             android:stopWithTask="false"
             android:foregroundServiceType="microphone|camera|location" />
 
+        <!-- Low-Power Adaptive VAD & Custom Wake-Word Service -->
         <service
             android:name=".ZaraWakeWordService"
             android:enabled="true"
@@ -130,6 +135,7 @@
             android:stopWithTask="false"
             android:foregroundServiceType="microphone" />
 
+        <!-- User-Consented Native Android Accessibility Service -->
         <service
             android:name=".ZaraAccessibilityService"
             android:enabled="true"
@@ -144,6 +150,7 @@
                 android:resource="@xml/zara_accessibility_config" />
         </service>
 
+        <!-- Notification Listener Service for Incoming WhatsApp & Call Announcements -->
         <service
             android:name=".ZaraNotificationListener"
             android:exported="true"
@@ -154,6 +161,7 @@
             </intent-filter>
         </service>
 
+        <!-- Boot Receiver for Restarting Voice & Wake-Word Service -->
         <receiver
             android:name=".ZaraBootReceiver"
             android:enabled="true"
